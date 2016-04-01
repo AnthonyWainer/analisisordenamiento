@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<br>
+<h1 align="center">Análisis de Métodos de Ordenamiento</h1>
+
+<div class="container">
+      <hr class="featurette-divider">
+      <hr class="featurette-divider">
+      <!-- Three columns of text below the carousel -->
+      <div class="row">
+        <div class="col-lg-4 burbu">
+          <h2>Burbuja</h2>
+          <p>
+        La Ordenación de burbuja (Bubble Sort en inglés) es un
+              sencillo algoritmo de ordenamiento.
+              Funciona revisando cada elemento de la lista
+              que va a ser ordenada con el siguiente,
+              intercambiándolos de posición si están en el orden equivocado.
+              <br> <strong>(n^2)</strong>
+          </p>
+            <div class="radio-inline">
+              <label><input type="radio" value="mediomillon" name="burbu">medio millón</label>
+            </div>
+            <div class="radio-inline">
+              <label><input type="radio" value="unmillon" name="burbu">1 millon</label>
+            </div>
+            <div class="radio-inline">
+              <label><input type="radio" value="diezmillones" name="burbu">10 millones</label>
+            </div>
+          <p><a class="btn btn-default" onclick="ordena('burbu')" href="#" role="button">Ver Tiempo »</a></p>
+            <hr>
+
+
+            <h3>Resultado:</h3>
+            <hr>
+            <img src="{% static '13.gif' %}" style="display: none;" id="spinner" alt="cargando..."  />
+            <span></span>
+
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4 quick">
+          <h2>Quicksort</h2>
+          <p>
+            El ordenamiento rápido (quicksort en inglés) es un algoritmo creado
+              por el científico británico en computación C. A. R. Hoare,
+              basado en la técnica de divide y vencerás, que permite, en promedio,
+              ordenar n elementos en un tiempo proporcional a
+              <br> <strong>(nlog n)</strong>
+          </p>
+            <div class="radio-inline">
+              <label><input type="radio" value="mediomillon" name="quick">medio millón</label>
+            </div>
+            <div class="radio-inline">
+              <label><input type="radio" value="unmillon" name="quick">1 millon</label>
+            </div>
+            <div class="radio-inline">
+              <label><input type="radio" value="diezmillones" name="quick">10 millones</label>
+            </div>
+          <p><a class="btn btn-default" href="#" onclick="ordena('quick')" role="button">Ver Tiempo  »</a></p>
+            <hr>
+            <h3>Resultado:</h3>
+            <hr>
+            <img src="{% static '13.gif' %}" style="display: none;" id="spinner" alt="cargando..."  />
+            <span></span>
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4 heap">
+          <h2>Heapsort</h2>
+          <p>
+          El ordenamiento por montículos (heapsort en inglés) es
+              un algoritmo de ordenamiento no recursivo, no estable,
+              con complejidad computacional <br> <strong>(nlog n)</strong>
+          </p>
+            <div class="radio-inline">
+              <label><input type="radio" value="mediomillon" name="heap">medio millón</label>
+            </div>
+            <div class="radio-inline">
+              <label><input type="radio" value="unmillon" name="heap">1 millon</label>
+            </div>
+            <div class="radio-inline">
+              <label><input type="radio" value="diezmillones" name="heap">10 millones</label>
+            </div>
+          <p><a class="btn btn-default" href="#" onclick="ordena('heap')" role="button">Ver Tiempo »</a></p>
+            <hr>
+            <h3>Resultado:</h3>
+            <hr>
+
+            <img src="{% static '13.gif' %}" style="display: none;" id="spinner" alt="cargando..."  />
+            <span></span>
+        </div><!-- /.col-lg-4 -->
+      </div><!-- /.row -->
+
+
+      <!-- START THE FEATURETTES -->
+
+      <hr class="featurette-divider">
+
+
+
+      <hr class="featurette-divider">
+    <br><br><br><br>
+      <!-- FOOTER -->
+      <footer>
+        <p>© 2016 Anthony Wainer, Inc. · <a href="#">Privacy</a> · <a href="#">Terms</a></p>
+      </footer>
+
+    </div>
+</body>
+
+<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<script>
+(function($, window, undefined) {
+    //is onprogress supported by browser?
+    var hasOnProgress = ("onprogress" in $.ajaxSettings.xhr());
+
+    //If not supported, do nothing
+    if (!hasOnProgress) {
+        return;
+    }
+
+    //patch ajax settings to call a progress callback
+    var oldXHR = $.ajaxSettings.xhr;
+    $.ajaxSettings.xhr = function() {
+        var xhr = oldXHR();
+        if(xhr instanceof window.XMLHttpRequest) {
+            xhr.addEventListener('progress', this.progress, false);
+        }
+
+        if(xhr.upload) {
+            xhr.upload.addEventListener('progress', this.progress, false);
+        }
+
+        return xhr;
+    };
+})(jQuery, window);
+</script>
+<script>
+    function ordena(d){
+         $('.'+d+' span').empty();
+        n = $("input:radio[name="+d+"]:checked").val();
+        if (!n){
+            alert("seleccionar una opción");
+        }
+        $.ajax({
+        beforeSend: function(xhr, status) {
+            // TODO: show spinner
+            $('.'+d+' #spinner').fadeIn(400,"linear");
+        },
+        complete: function() {
+            // TODO: hide spinner
+            $('.'+d+' #spinner').fadeOut(400,"linear");
+        },
+        progress: function(e) {
+                //make sure we can compute the length
+                if(e.lengthComputable) {
+                    //calculate the percentage loaded
+                    var pct = (e.loaded / e.total) * 100;
+
+                    //log percentage loaded
+                    console.log(pct);
+                }
+                //this usually happens when Content-Length isn't set
+                else {
+                    console.warn('Content Length not reported!');
+                }
+            },
+
+        type: 'GET',
+        url: d,
+        data: {'nombre':n},
+        success: function(data){
+            $('.'+d+' span').empty().html(data);
+        }
+        });
+    }
+</script>
+</html>
