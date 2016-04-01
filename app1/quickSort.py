@@ -2,50 +2,30 @@ from django.http import HttpResponse
 from .numeros import readFile
 from .crono import cronometro
 
-def quickSort(alist):
-   quickSortHelper(alist,0,len(alist)-1)
+def quicksort(array):
+    less = []
+    equal = []
+    greater = []
 
-def quickSortHelper(alist,first,last):
-   if first<last:
+    if len(array) > 1:
+        pivot = array[0]
+        for x in array:
+            if x < pivot:
+                less.append(x)
+            if x == pivot:
+                equal.append(x)
+            if x > pivot:
+                greater.append(x)
+        # Don't forget to return something!
+        return quicksort(less)+equal+quicksort(greater)  # Just use the + operator to join lists
+    # Note that you want equal ^^^^^ not pivot
+    else:  # You need to hande the part at the end of the recursion - when you only have one element in your array, just return the array.
+        return array
 
-       splitpoint = partition(alist,first,last)
-
-       quickSortHelper(alist,first,splitpoint-1)
-       quickSortHelper(alist,splitpoint+1,last)
-
-
-def partition(alist,first,last):
-   pivotvalue = alist[first]
-
-   leftmark = first+1
-   rightmark = last
-
-   done = False
-   while not done:
-
-       while leftmark <= rightmark and alist[leftmark] <= pivotvalue:
-           leftmark = leftmark + 1
-
-       while alist[rightmark] >= pivotvalue and rightmark >= leftmark:
-           rightmark = rightmark -1
-
-       if rightmark < leftmark:
-           done = True
-       else:
-           temp = alist[leftmark]
-           alist[leftmark] = alist[rightmark]
-           alist[rightmark] = temp
-
-   temp = alist[first]
-   alist[first] = alist[rightmark]
-   alist[rightmark] = temp
-
-   return rightmark
-
-alist = [54,26,93,17,77,31,44,55,20]
+#alist = [54,26,93,17,77,31,44,55,20]
 def quick(r):
     name = r.GET.get('nombre')
     alist = readFile(name)
-    t = cronometro(quickSort)(alist)
+    t = cronometro(quicksort)(alist)
     #print(alist)
-    return HttpResponse("el tiempo  ordenamiento de "+name+" números es: "+str(t))
+    return HttpResponse("el tiempo  ordenamiento de "+name+" números es: "+str(t)+" segundos")

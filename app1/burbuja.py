@@ -4,7 +4,6 @@ from .numeros import readFile
 from .crono import cronometro
 
 def burbuja(elementos):
-
     numero = len(elementos)
     i= 0
     while (i < numero):
@@ -22,7 +21,7 @@ def burbu(r):
     e = readFile(name)
     t = cronometro(burbuja)(e)
     #print(alist)
-    return HttpResponse("el tiempo  ordenamiento de "+name+" números es: "+str(t))
+    return HttpResponse("el tiempo  ordenamiento de "+name+" números es: "+str(t)+" segundos")
 
     #for elemento in elementos:
         #print(elemento)
